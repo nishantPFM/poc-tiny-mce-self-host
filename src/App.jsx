@@ -16,6 +16,31 @@ import "./App.css";
 
 export default function App() {
   const editorRef = useRef(null);
+  const createAndAddBlobInfo = (file, readerResult, callback) => {
+    const id = `blobid${Date.now()}`;
+    const blobCache = editorRef.current.editorUpload.blobCache;
+    const base64 = readerResult.split(",")[1];
+    const blobInfo = blobCache.create(id, file, base64);
+    blobCache.add(blobInfo);
+    callback(blobInfo.blobUri(), { title: file.name });
+  };
+
+  const handleFileChange = (file, callback) => {
+    const reader = new FileReader();
+    reader.onload = () => createAndAddBlobInfo(file, reader.result, callback);
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileUpload = (callback, value, meta) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = (event) =>
+      handleFileChange(event.target.files[0], callback);
+
+    input.click();
+  };
 
   return (
     <div
@@ -66,6 +91,12 @@ export default function App() {
           // Toolbar configuration
           toolbar:
             "strikethrough bold italic | alignleft aligncenter alignright alignjustify | image preview pagebreak",
+
+          // file picket types
+          file_picker_types: "image",
+
+          // file picker callback
+          file_picker_callback: handleFileUpload,
         }}
         // Name attribute for the editor
         name="body"
