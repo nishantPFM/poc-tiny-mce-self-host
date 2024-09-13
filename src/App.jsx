@@ -61,7 +61,7 @@ export default function App() {
 
           // List of plugins to include in the editor
           plugins:
-            "advlist autolink lists charmap print preview anchor help searchreplace visualblocks code save insertdatetime media table paste wordcount image preview pagebreak",
+            "advlist autolink lists charmap preview anchor help searchreplace visualblocks code save insertdatetime media table wordcount image preview pagebreak",
 
           // Toolbar configuration
           toolbar:
